@@ -1,5 +1,9 @@
 import * as fs from 'fs/promises';
 import * as readline from 'readline';
+import * as dotenv from 'dotenv';
+
+// .envファイルを読み込む
+dotenv.config();
 
 import { deepResearch, writeFinalReport } from './deep-research';
 import { generateFeedback } from './feedback';

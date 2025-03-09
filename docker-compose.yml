@@ -1,10 +1,35 @@
+version: "3"
 services:
-  deep-research:
-    container_name: deep-research
-    build: .
-    env_file:
-      - .env.local
+  deep_research_aomni:
+    image: ${IMAGE_NAME:-deep_research_aomni}:${IMAGE_VERSION:-0.1.0}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        WORKDIR: /project
+    deploy:
+      resources:
+        limits:
+          memory: 5g
     volumes:
-      -  ./:/app/
+      - type: bind
+        source: .
+        target: /project
+      - type: bind
+        source: ~/.gitconfig
+        target: /root/.gitconfig
+      - type: bind
+        source: ~/.ssh
+        target: /root/.ssh
+    ports:
+      - ${HOST_SSH_PORT}:22
+    container_name: ${IMAGE_NAME:-deep_research_aomni}_${IMAGE_VERSION:-0.1.0}
+    environment:
+      TZ: Asia/Tokyo
+    #   - OPENAI_API_KEY=${OPENAI_API_KEY}
+    #   - OPENAI_API_URL=${OPENAI_API_URL}
     tty: true
-    stdin_open: true
+    restart: always
+    entrypoint: >
+      /bin/bash -c
+      "poetry config virtualenvs.create false && service ssh start && tail -f /dev/null"

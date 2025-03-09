@@ -1,3 +1,4 @@
+**dockerでのセットアップ方法を修正**
 # Open Deep Research
 
 An AI-powered research assistant that performs iterative, deep research on any topic by combining search engines, web scraping, and large language models.
@@ -109,19 +110,24 @@ To use local LLM, comment out `OPENAI_KEY` and instead uncomment `OPENAI_ENDPOIN
 ### Docker
 
 1. Clone the repository
-2. Rename `.env.example` to `.env.local` and set your API keys
+2. Rename `.env.example` to `.env` and set your API keys
 
-3. Run `npm install`
-
-4. Run the Docker image:
+3. Run the Docker image:
 
 ```bash
 docker compose up -d
 ```
 
+4. Run `npm install`
+
 5. Execute `npm run docker` in the docker service:
 ```bash
-docker exec -it deep-research npm run docker
+make bash
+```
+or
+
+```bash
+docker exec -it <container_id> /bin/bash
 ```
 
 ## Usage
