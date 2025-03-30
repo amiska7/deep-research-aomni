@@ -31,14 +31,10 @@ RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
     && npm -v
 
 # SSHデーモン用のディレクトリを作成
-RUN mkdir /var/run/sshd\
-    # rootユーザーのパスワードを設定
-    && echo 'root:root' | chpasswd\
-    # SSHの設定ファイルを編集してrootユーザーのログインを許可
-    && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config\
-    # PAM認証の設定を変更
+RUN mkdir /var/run/sshd \
+    && sed -i 's/#PermitRootLogin.*/PermitRootLogin prohibit-password/' /etc/ssh/sshd_config \
+    && sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config \
     && sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd
-
 # SSHのデフォルトポート(22)を公開
 EXPOSE 22
 
